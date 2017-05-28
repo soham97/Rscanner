@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Rscanner</string>
+    <string name="camera_button">Take photo</string>
+    <string name="gallery_button">Select photo</string>
+</resources>
