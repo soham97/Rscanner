@@ -149,6 +149,8 @@ public class MainActivity extends Activity {
                 touchedRect.x = (int)x;
                 touchedRect.y = (int)y;
 
+                //originally the value was 8, but changed to 5 to prevent crashing of app but reduced screen
+                //coverage
                 touchedRect.width = 8;
                 touchedRect.height = 8;
 

@@ -20,20 +20,20 @@
         android:drawableLeft="@drawable/ic_add_a_photo_white_24dp"
         android:drawablePadding="5dp" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="20dp"
-        android:id="@+id/cropped_image"
-        android:layout_above="@id/camera_button"
-        android:visibility="gone"
-        />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:id="@+id/touchcolor"
-        android:layout_below="@id/cropped_image" />
+        android:layout_above="@id/camera_button" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:id="@+id/cropped_image"
+        android:layout_above="@id/touchcolor"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>
