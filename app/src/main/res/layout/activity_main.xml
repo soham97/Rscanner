@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/mainlayout">
 
     <Button
         android:layout_width="fill_parent"
@@ -19,21 +20,20 @@
         android:drawableLeft="@drawable/ic_add_a_photo_white_24dp"
         android:drawablePadding="5dp" />
 
-    <!--<Button-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/gallery_button"-->
-        <!--android:id="@+id/gallery_button"-->
-        <!--android:padding="10dp"-->
-        <!--android:background="@drawable/rectangular_button_normal"-->
-        <!--android:textColor="#ffd3ffe5"-->
-        <!--android:textStyle="bold"-->
-        <!--android:drawableLeft="@drawable/ic_insert_photo_white_24dp"-->
-        <!--android:drawablePadding="5dp"-->
-        <!--android:layout_above="@+id/camera_button"-->
-        <!--android:layout_alignStart="@+id/camera_button"-->
-        <!--android:layout_alignEnd="@+id/camera_button" />-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:id="@+id/cropped_image"
+        android:layout_above="@id/camera_button"
+        android:visibility="gone"
+        />
 
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:id="@+id/touchcolor"
+        android:layout_below="@id/cropped_image" />
 
 </RelativeLayout>
