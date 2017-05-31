@@ -57,6 +57,9 @@ public class MainActivity extends Activity {
     private Mat mRgba;
     private Scalar mBlobColorHsv;
     private Scalar mBlobColorRgba;
+    
+    private List<String> rings_colors = new ArrayList<>();
+    private int[] color_values = new int[4];
 
 
     private static final int SELECT_PHOTO = 0;
@@ -151,8 +154,8 @@ public class MainActivity extends Activity {
 
                 //originally the value was 8, but changed to 5 to prevent crashing of app but reduced screen
                 //coverage
-                touchedRect.width = 8;
-                touchedRect.height = 8;
+                touchedRect.width = 1;
+                touchedRect.height = 1;
 
                 Mat touchedRegionRgba = new Mat();
                 touchedRegionRgba = mRgba.submat(touchedRect);
@@ -174,7 +177,16 @@ public class MainActivity extends Activity {
                 mTouchcolor.setTextColor(Color.rgb((int) mBlobColorRgba.val[0],
                         (int) mBlobColorRgba.val[1],
                         (int) mBlobColorRgba.val[2]));
+                        
+                ColorUtils colorUtils = new ColorUtils();
+                String s = colorUtils.getColorNameFromRgb((int) mBlobColorRgba.val[0],(int) mBlobColorRgba.val[1], (int) mBlobColorRgba.val[2]);
+                Log.e("COLORUTILS", s);
+                rings_colors.add(s);
 
+                if (rings_colors.size() == 4) {
+                    decodeColor(rings_colors);
+                }
+        
                 return false;
             }
         });
@@ -308,4 +320,47 @@ public class MainActivity extends Activity {
 
         return new Scalar(pointMatRgba.get(0, 0));
     }
+    
+    private void decodeColor (List<String> list) {
+        for (int i = 0; i < list.size(); i++) {
+            switch (list.get(i)) {
+                case "Black":
+                    color_values[i] = 0;
+                    break;
+                case "Brown":
+                    color_values[i] = 1;
+                    break;
+                case "Red":
+                    color_values[i] = 2;
+                    break;
+                case "Orange":
+                    color_values[i] = 3;
+                    break;
+                case "Yellow":
+                    color_values[i] = 4;
+                    break;
+                case "Green":
+                    color_values[i] = 5;
+                    break;
+                case "Blue":
+                    color_values[i] = 6;
+                    break;
+                case "Violet":
+                    color_values[i] = 7;
+                    break;
+                case "Grey":
+                    color_values[i] = 8;
+                    break;
+                case "White":
+                    color_values[i] = 9;
+                    break;
+                default:
+                    break;
+            }
+            String resistorValue = color_values[0] + color_values[1] + " x 10^(" + color_values[2] + ")";
+            Log.e("RESISTOR_VALUE", resistorValue);
+            rings_colors = new ArrayList<>();
+        }
+    }
+
     }
