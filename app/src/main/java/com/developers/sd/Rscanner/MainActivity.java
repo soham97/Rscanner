@@ -20,8 +20,14 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spannable;
 import android.util.EventLog;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -47,7 +53,7 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private Button mCameraPhoto;
     private ImageView mImageView;
@@ -57,9 +63,13 @@ public class MainActivity extends Activity {
     private Mat mRgba;
     private Scalar mBlobColorHsv;
     private Scalar mBlobColorRgba;
-    
+    private MenuItem mSave;
+    private MenuItem mReset;
+    private String mtempColor;
+
     private List<String> rings_colors = new ArrayList<>();
     private int[] color_values = new int[4];
+    List<String> mList = new ArrayList<>();
 
 
     private static final int SELECT_PHOTO = 0;
@@ -69,6 +79,8 @@ public class MainActivity extends Activity {
     double x = -1;
     double y = -1;
     private static final String TAG = "MainActivity";
+    private static final String imageview = "imageview";
+
 
 
     @Override
@@ -93,6 +105,8 @@ public class MainActivity extends Activity {
         mPhotoFile = getPhotoFile();
         final Context context = this;
 
+        final Toolbar tToolbar = (Toolbar) findViewById(R.id.tToolbar);
+
         mCameraPhoto = (Button) findViewById(R.id.camera_button);
         mImageView = (ImageView) findViewById(R.id.cropped_image);
         mTouchcolor = (TextView)  findViewById(R.id.touchcolor);
@@ -103,6 +117,7 @@ public class MainActivity extends Activity {
         mCameraPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mPhotoFile = getPhotoFile();
                 final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 Uri uri = FileProvider.getUriForFile(context, "com.developers.sd.Rscanner.provider", mPhotoFile);
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
@@ -170,23 +185,25 @@ public class MainActivity extends Activity {
 
                 mBlobColorRgba = convertScalarHsv2Rgba(mBlobColorHsv);
 
-                mTouchcolor.setText("Color: #" + String.format("%02X", (int)mBlobColorRgba.val[0])
-                        + String.format("%02X", (int)mBlobColorRgba.val[1])
-                        + String.format("%02X", (int)mBlobColorRgba.val[2]));
-
                 mTouchcolor.setTextColor(Color.rgb((int) mBlobColorRgba.val[0],
                         (int) mBlobColorRgba.val[1],
                         (int) mBlobColorRgba.val[2]));
-                        
-                ColorUtils colorUtils = new ColorUtils();
-                String s = colorUtils.getColorNameFromRgb((int) mBlobColorRgba.val[0],(int) mBlobColorRgba.val[1], (int) mBlobColorRgba.val[2]);
-                Log.e("COLORUTILS", s);
-                rings_colors.add(s);
 
-                if (rings_colors.size() == 4) {
-                    decodeColor(rings_colors);
-                }
-        
+                ColorUtils colorUtils = new ColorUtils();
+//                String s = colorUtils.getColorNameFromRgb((int) mBlobColorRgba.val[0],(int) mBlobColorRgba.val[1], (int) mBlobColorRgba.val[2]);
+                mtempColor = colorUtils.getColorNameFromRgb((int) mBlobColorRgba.val[0],(int) mBlobColorRgba.val[1], (int) mBlobColorRgba.val[2]);
+
+//                Log.e("COLORUTILS", s);
+//                rings_colors.add(s);
+//
+//                if (rings_colors.size() == 4) {
+//                    decodeColor(rings_colors);
+//                }
+
+                mTouchcolor.setText("COLOR_HEX: #" + String.format("%02X", (int)mBlobColorRgba.val[0])
+                        + String.format("%02X", (int)mBlobColorRgba.val[1])
+                        + String.format("%02X", (int)mBlobColorRgba.val[2]) + "\n" + "COLOR = " + mtempColor);
+
                 return false;
             }
         });
@@ -203,6 +220,9 @@ public class MainActivity extends Activity {
         if(requestCode == PIC_CROP){
             mImageView.setImageURI(FileProvider.getUriForFile(this, "com.developers.sd.Rscanner.provider", mPhotoFile));
             mImageView.setVisibility(View.VISIBLE);
+            mImageView.invalidate();
+            mSave.setVisible(true);
+            mReset.setVisible(true);
         }
 //        if (requestCode == SELECT_PHOTO) {
 //            Uri uri = data.getData();
@@ -223,13 +243,42 @@ public class MainActivity extends Activity {
 //        }
     }
 
-//    public File getPhotoFile() {
-//        File externalFilesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-//        if (externalFilesDir == null) {
-//            return null;
-//        }
-//        return new File(externalFilesDir, getPhotoFilename());
-//    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        mSave = menu.findItem(R.id.Save);
+        mReset = menu.findItem(R.id.Reset);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.Save:
+                mList.add(mtempColor);
+                if (mList.size() == 4) {
+                    decodeColor(mList);
+                }
+                if (mList.size() == 5) {
+                    Toast.makeText(this, "4 colors already recorded, hence reseting", Toast.LENGTH_SHORT).show();
+                    mList.clear();
+                    mTouchcolor.setText("");
+                }
+                return true;
+            case R.id.Reset:
+                mList.clear();
+                mTouchcolor.setText("");
+                return true;
+            default:
+                return true;
+        }
+    }
 
     public File getPhotoFile() {
         File externalFilesDir = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -320,7 +369,7 @@ public class MainActivity extends Activity {
 
         return new Scalar(pointMatRgba.get(0, 0));
     }
-    
+
     private void decodeColor (List<String> list) {
         for (int i = 0; i < list.size(); i++) {
             switch (list.get(i)) {
@@ -357,10 +406,13 @@ public class MainActivity extends Activity {
                 default:
                     break;
             }
-            String resistorValue = color_values[0] + color_values[1] + " x 10^(" + color_values[2] + ")";
-            Log.e("RESISTOR_VALUE", resistorValue);
-            rings_colors = new ArrayList<>();
+//                            rings_colors = new ArrayList<>();
         }
+
+        String resistorValue = color_values[0] +" " +color_values[1] + " x 10^(" + color_values[2] + ")" +" " +"\u03a9";
+        Log.e("RESISTOR_VALUE", resistorValue);
+        mTouchcolor.setText(resistorValue);
+        Toast.makeText(this, resistorValue, Toast.LENGTH_LONG).show();
     }
 
-    }
+}
