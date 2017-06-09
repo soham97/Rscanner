@@ -190,8 +190,12 @@ public class MainActivity extends AppCompatActivity {
                         (int) mBlobColorRgba.val[2]));
 
                 ColorUtils colorUtils = new ColorUtils();
+                ColorUtils1 colorUtils1 = new ColorUtils1();
+
 //                String s = colorUtils.getColorNameFromRgb((int) mBlobColorRgba.val[0],(int) mBlobColorRgba.val[1], (int) mBlobColorRgba.val[2]);
-                mtempColor = colorUtils.getColorNameFromRgb((int) mBlobColorRgba.val[0],(int) mBlobColorRgba.val[1], (int) mBlobColorRgba.val[2]);
+//                mtempColor = colorUtils.getColorNameFromRgb((int) mBlobColorRgba.val[0],(int) mBlobColorRgba.val[1], (int) mBlobColorRgba.val[2]);
+                mtempColor = colorUtils1.getColorNameFromHSV((int) mBlobColorHsv.val[0],(int) mBlobColorHsv.val[1], (int) mBlobColorHsv.val[2]);
+
 
 //                Log.e("COLORUTILS", s);
 //                rings_colors.add(s);

@@ -17,6 +17,7 @@ public class ColorUtils {
         colorList.add(new ColorName("Violet", 0xEE, 0x82, 0xEE));
         colorList.add(new ColorName("Grey", 0x00, 0x00, 0x00));
         colorList.add(new ColorName("White", 0x80, 0x80, 0x80));
+
         return colorList;
     }
 
