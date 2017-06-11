@@ -10,6 +10,9 @@ public class ColorUtils {
         colorList.add(new ColorName("Black", 0x00, 0x00, 0x00));
         colorList.add(new ColorName("Brown", 0xA5, 0x2A, 0x2A));
         colorList.add(new ColorName("Red", 0xFF, 0x00, 0x00));
+        colorList.add(new ColorName("Red", 0xD1, 0x29, 0x35));
+
+
         colorList.add(new ColorName("Orange", 0xFF, 0xA5, 0x00));
         colorList.add(new ColorName("Yellow", 0xFF, 0xFF, 0x00));
         colorList.add(new ColorName("Green", 0x00, 0x80, 0x00));

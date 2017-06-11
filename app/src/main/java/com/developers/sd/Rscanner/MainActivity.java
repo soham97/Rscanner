@@ -193,8 +193,8 @@ public class MainActivity extends AppCompatActivity {
                 ColorUtils1 colorUtils1 = new ColorUtils1();
 
 //                String s = colorUtils.getColorNameFromRgb((int) mBlobColorRgba.val[0],(int) mBlobColorRgba.val[1], (int) mBlobColorRgba.val[2]);
-//                mtempColor = colorUtils.getColorNameFromRgb((int) mBlobColorRgba.val[0],(int) mBlobColorRgba.val[1], (int) mBlobColorRgba.val[2]);
-                mtempColor = colorUtils1.getColorNameFromHSV((int) mBlobColorHsv.val[0],(int) mBlobColorHsv.val[1], (int) mBlobColorHsv.val[2]);
+                mtempColor = colorUtils.getColorNameFromRgb((int) mBlobColorRgba.val[0],(int) mBlobColorRgba.val[1], (int) mBlobColorRgba.val[2]);
+//                mtempColor = colorUtils1.getColorNameFromHSV((int) mBlobColorHsv.val[0],(int) mBlobColorHsv.val[1], (int) mBlobColorHsv.val[2]);
 
 
 //                Log.e("COLORUTILS", s);
@@ -222,7 +222,13 @@ public class MainActivity extends AppCompatActivity {
             performCrop(FileProvider.getUriForFile(this, "com.developers.sd.Rscanner.provider", mPhotoFile));
         }
         if(requestCode == PIC_CROP){
-            mImageView.setImageURI(FileProvider.getUriForFile(this, "com.developers.sd.Rscanner.provider", mPhotoFile));
+            try {
+                Bitmap thumbnail = MediaStore.Images.Media.getBitmap(getContentResolver(), FileProvider.getUriForFile(this, "com.developers.sd.Rscanner.provider", mPhotoFile));
+                mImageView.setImageBitmap(thumbnail);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//            mImageView.setImageURI(FileProvider.getUriForFile(this, "com.developers.sd.Rscanner.provider", mPhotoFile));
             mImageView.setVisibility(View.VISIBLE);
             mImageView.invalidate();
             mSave.setVisible(true);

@@ -15,6 +15,8 @@ public class ColorUtils1 {
     private ArrayList<ColorUtils1.ColorName> initColorList() {
         ArrayList<ColorUtils1.ColorName> colorList = new ArrayList<>();
         colorList.add(new ColorName("Black", 0, 0, 0));
+        colorList.add(new ColorName("Black", 0, 0, 10));
+        colorList.add(new ColorName("Black", 4, 30, 20));
         colorList.add(new ColorName("Black", 180, 250, 100));
         colorList.add(new ColorName("Brown", 0, 90, 10));
         colorList.add(new ColorName("Brown", 15, 250, 100));
